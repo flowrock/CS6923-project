@@ -15,14 +15,17 @@ class K_Fold_SVM(object):
 	def get_optimal_param(self, cand_params):
 		best_accuracy = 0
 		best_param = None
+		results = []
 		for param in cand_params:
 			r = self.cross_validation(param)
+			results.append(r)
+
 			if r>best_accuracy:
 				best_accuracy = r
 				best_param = param
 		print 'best accuracy is', best_accuracy
 		print 'best parameter is', best_param
-		return best_param
+		return best_param, results
 
 	def cross_validation(self, param):
 		folds_x, folds_y = self.get_k_folds()
@@ -67,8 +70,9 @@ class K_Fold_SVM(object):
 		return folds_x, folds_y
 
 	def get_optimal_model(self, cand_params):
-		best_param = self.get_optimal_param(cand_params)
+		best_param, results = self.get_optimal_param(cand_params)
 		m = svm_train(self.total_y, self.total_x, best_param)
-		return m, best_param
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~results is", results
+		return m, best_param, results
 
 
